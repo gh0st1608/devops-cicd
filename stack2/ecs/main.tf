@@ -27,7 +27,7 @@ resource "aws_ecs_service" "django_service" {
   desired_count   = 1
 
   network_configuration {
-    subnets          = ["subnet-014132ca792f34177"]  # Reemplaza con tu subred
+    subnets          = ["subnet-0a1d412d9012fd6f6"]  # Reemplaza con tu subred
     assign_public_ip = true
   }
 }
