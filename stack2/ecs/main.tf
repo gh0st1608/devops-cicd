@@ -24,7 +24,7 @@ resource "aws_ecs_service" "django_service" {
   name            = "django-service"
   cluster         = aws_ecs_cluster.django_cluster.id
   task_definition = aws_ecs_task_definition.django_task.id
-  desired_count   = 1
+  launch_type     = "FARGATE"
 
   network_configuration {
     subnets          = ["subnet-0a1d412d9012fd6f6"]  # Reemplaza con tu subred
