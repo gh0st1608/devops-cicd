@@ -22,6 +22,7 @@ jobs:
           terraform init
 
       - name: Apply Terraform
+        id: apply_tf
         env:
           TF_VAR_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}  # Reemplaza VARIABLE1 con tu nombre
           TF_VAR_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  # Reemplaza VARIABLE2 con tu nombre
@@ -31,6 +32,7 @@ jobs:
           terraform apply -auto-approve
 
       - name: Log in to Amazon ECR
+        id: login_ecr
         uses: aws-actions/amazon-ecr-login@v1
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -38,12 +40,23 @@ jobs:
           AWS_REGION: ${{ secrets.AWS_REGION }}
 
       - name: Build and push Docker image
+        id: build_ecr
         run: |
           docker build . -t django-app
           docker tag django-app:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/django-app:latest
           docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/django-app:latest
 
       - name: Deploy to AWS ECS
+        id: deploy_ecs
         run: |
           aws ecs update-service --cluster django-cluster --service django-service --force-new-deployment
-        
+
+      - name: Check for errors
+        run: |
+          echo "Checking previous steps..."
+          if [[ "${{ steps.apply_tf.outcome }}" == "failure" ]] || [[ "${{ steps.build_ecr.outcome }}" == "failure" ]] || [[ "${{ steps.deploy_ecs.outcome }}" == "failure" ]]; then
+            echo "One or more steps failed, but continuing..."
+          else
+            echo "All steps succeeded."
+          fi
+    
