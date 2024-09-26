@@ -12,3 +12,4 @@ stack2/.terraform.lock.hcl
 stack2/terraform.tfstate
 stack2/terraform.tfstate.backup
 stack2/.terraform/
+stack2/variables.tf

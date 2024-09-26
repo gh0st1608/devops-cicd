@@ -22,6 +22,9 @@ jobs:
           terraform init
 
       - name: Apply Terraform
+        env:
+          TF_VAR_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}  # Reemplaza VARIABLE1 con tu nombre
+          TF_VAR_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  # Reemplaza VARIABLE2 con tu nombre
         run: |
           cd stack2
           terraform apply -auto-approve
