@@ -6,10 +6,11 @@ variable "secret_key" {
   type = string
 }
 
-/* variable "region" {
+ variable "region" {
   type = string
 }
 
+/*
 variable "localstack_ci_key" {
   type = string
 } */
