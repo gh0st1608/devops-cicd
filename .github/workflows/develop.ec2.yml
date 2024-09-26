@@ -29,9 +29,9 @@ jobs:
           docker build -t my-django-image .
 
       - name: Set up Terraform
-        run: |
-          curl -LO https://raw.githubusercontent.com/terraform-linters/tflint/master/install.sh
-          bash install.sh
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.0
 
       - name: Init Terraform
         run: |
