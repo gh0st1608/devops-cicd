@@ -7,38 +7,9 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    services:
-      localstack:
-        image: localstack/localstack
-        ports:
-          - 4566:4566
-        options: >-
-          --env SERVICES=s3,ecs,iam,logs
-          --volume /var/run/docker.sock:/var/run/docker.sock
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-
-      - name: Build Docker image
-        run: |
-          docker build -t my-django-image .
-      
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-  
-      - name: Push Docker image to ECR
-        run: |
-          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin <aws_account_id>.dkr.ecr.us-east-1.amazonaws.com
-          docker tag my-django-image <aws_account_id>.dkr.ecr.us-east-1.amazonaws.com/my-django-image:latest
-          docker push <aws_account_id>.dkr.ecr.us-east-1.amazonaws.com/my-django-image:latest
 
       - name: Set up Terraform
         run: |
@@ -47,10 +18,27 @@ jobs:
 
       - name: Init Terraform
         run: |
-          cd terraform
+          cd stack2
           terraform init
 
       - name: Apply Terraform
         run: |
-          cd terraform
+          cd stack2
           terraform apply -auto-approve
+
+      - name: Log in to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build and push Docker image
+        run: |
+          docker build . -t django-app
+          docker tag django-app:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/django-app:latest
+          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/django-app:latest
+
+      - name: Deploy to AWS ECS
+        run: |
+          aws ecs update-service --cluster my-django-cluster --service my-django-service --force-new-deployment
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: us-east-1
