@@ -1,0 +1,56 @@
+name: Deploy to LocalStack
+
+on:
+  push:
+    branches: [deploy-ecs]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    services:
+      localstack:
+        image: localstack/localstack
+        ports:
+          - 4566:4566
+        options: >-
+          --env SERVICES=s3,ecs,iam,logs
+          --volume /var/run/docker.sock:/var/run/docker.sock
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Build Docker image
+        run: |
+          docker build -t my-django-image .
+      
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+  
+      - name: Push Docker image to ECR
+        run: |
+          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin <aws_account_id>.dkr.ecr.us-east-1.amazonaws.com
+          docker tag my-django-image <aws_account_id>.dkr.ecr.us-east-1.amazonaws.com/my-django-image:latest
+          docker push <aws_account_id>.dkr.ecr.us-east-1.amazonaws.com/my-django-image:latest
+
+      - name: Set up Terraform
+        run: |
+          curl -LO https://raw.githubusercontent.com/terraform-linters/tflint/master/install.sh
+          bash install.sh
+
+      - name: Init Terraform
+        run: |
+          cd terraform
+          terraform init
+
+      - name: Apply Terraform
+        run: |
+          cd terraform
+          terraform apply -auto-approve

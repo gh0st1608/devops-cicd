@@ -1,0 +1,14 @@
+stack1/keydev
+stack1/keydev.ppk
+stack1/.terraform/
+stack1/terraform.tfvars
+stack1/.terraform.lock.hcl
+stack1/terraform.tfstate
+stack1/terraform.tfstate.backup
+
+
+stack2/terraform.tfvars
+stack2/.terraform.lock.hcl
+stack2/terraform.tfstate
+stack2/terraform.tfstate.backup
+stack2/.terraform/
