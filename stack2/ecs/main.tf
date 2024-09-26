@@ -1,5 +1,5 @@
-resource "aws_ecs_cluster" "my_cluster" {
-  name = "my-cluster"
+resource "aws_ecs_cluster" "django_cluster" {
+  name = "django-cluster"
 }
 
 resource "aws_ecs_task_definition" "django_task" {
@@ -22,7 +22,7 @@ resource "aws_ecs_task_definition" "django_task" {
 
 resource "aws_ecs_service" "django_service" {
   name            = "django-service"
-  cluster         = aws_ecs_cluster.my_cluster.id
+  cluster         = aws_ecs_cluster.django_cluster.id
   task_definition = aws_ecs_task_definition.django_task.id
   desired_count   = 1
 
