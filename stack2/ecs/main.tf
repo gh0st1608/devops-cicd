@@ -9,9 +9,12 @@ resource "aws_ecs_task_definition" "django_task" {
   cpu                     = "256"
   memory                  = "512"
 
+  execution_role_arn      = var.ecs_role_task_execution  # Agrega esta línea
+  task_role_arn           = var.ecs_role_task_execution 
+
   container_definitions = jsonencode([{
     name      = "django_container"
-    image     = "${var.ecs_image_name}"
+    image     = "${var.ecs_image_name}:latest"
     essential = true
     portMappings = [{
       containerPort = 8000
