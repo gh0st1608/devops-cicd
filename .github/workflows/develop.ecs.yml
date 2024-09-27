@@ -46,9 +46,9 @@ jobs:
       - name: Build and push Docker image
         id: build_ecr
         run: |
-          docker build . -t django-app
-          docker tag django-app:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/django-app:latest
-          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/django-app:latest
+          docker build . -t ${{ secrets.AWS_ECR_REPOSITORY_NAME }}
+          docker tag ${{ secrets.AWS_ECR_REPOSITORY_NAME }}:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/${{ secrets.AWS_ECR_REPOSITORY_NAME }}:latest
+          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/${{ secrets.AWS_ECR_REPOSITORY_NAME }}:latest
 
       - name: Deploy to AWS ECS
         id: deploy_ecs
