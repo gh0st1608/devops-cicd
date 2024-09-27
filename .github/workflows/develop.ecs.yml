@@ -60,6 +60,10 @@ jobs:
         id: deploy_ecs
         run: |
           aws ecs update-service --cluster ${{ secrets.AWS_ECS_CLUSTER_NAME }} --service ${{ secrets.AWS_ECS_SERVICE_NAME }} --force-new-deployment --debug
+      
+      - name: Ping to ECR
+        run: |
+          curl https://api.ecr.us-east-1.amazonaws.com/  
 
       - name: Destroy Terraform resources on failure
         if: failure()  # Solo se ejecuta si un paso anterior falla
