@@ -10,7 +10,7 @@ resource "aws_ecs_task_definition" "django_task" {
   memory                  = "512"
 
   execution_role_arn      = var.ecs_role_task_execution  # Agrega esta línea
-  task_role_arn           = var.ecs_role_task_execution 
+  #task_role_arn           = var.ecs_role_task_execution 
 
   container_definitions = jsonencode([{
     name      = "django_container"
