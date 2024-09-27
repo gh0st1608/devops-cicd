@@ -33,6 +33,7 @@ resource "aws_ecs_service" "django_service" {
 
   network_configuration {
     subnets          = ["subnet-0a1d412d9012fd6f6"]  # Reemplaza con tu subred
+    security_groups  = ["sg-0a7523b4abaead0af"] 
     assign_public_ip = true
   }
 }
