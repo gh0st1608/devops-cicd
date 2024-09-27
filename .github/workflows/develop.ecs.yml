@@ -50,7 +50,7 @@ jobs:
       - name: Deploy to AWS ECS
         id: deploy_ecs
         run: |
-          aws ecs update-service --cluster django-cluster --service django-service --force-new-deployment
+          aws ecs update-service --cluster ${{ secrets.AWS_ECS_CLUSTER_NAME }} --service ${{ secrets.AWS_ECS_SERVICE_NAME }} --force-new-deployment --debug
 
       - name: Destroy Terraform resources on failure
         if: failure()  # Solo se ejecuta si un paso anterior falla
