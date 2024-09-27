@@ -54,7 +54,9 @@ jobs:
 
       - name: Destroy Terraform resources on failure
         if: failure()  # Solo se ejecuta si un paso anterior falla
-        run: terraform destroy -auto-approve
+        run: |
+          cd stack2
+          terraform destroy -auto-approve
         env:
           TF_VAR_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}  # Reemplaza VARIABLE1 con tu nombre
           TF_VAR_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  # Reemplaza VARIABLE2 con tu nombre
