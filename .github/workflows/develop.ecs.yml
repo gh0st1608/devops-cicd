@@ -61,6 +61,7 @@ jobs:
           if [[ "${{ steps.apply_tf.outcome }}" == "failure" ]] || [[ "${{ steps.build_ecr.outcome }}" == "failure" ]] || [[ "${{ steps.deploy_ecs.outcome }}" == "failure" ]]; then
             echo "One or more steps failed, but continuing..."
           else
+            cd stack2
             terraform destroy -auto-approve
           fi
     
