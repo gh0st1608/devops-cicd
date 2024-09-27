@@ -39,7 +39,6 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
-        continue-on-error: true
 
       - name: Build and push Docker image
         id: build_ecr
@@ -47,21 +46,17 @@ jobs:
           docker build . -t django-app
           docker tag django-app:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/django-app:latest
           docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/django-app:latest
-        continue-on-error: true
 
       - name: Deploy to AWS ECS
         id: deploy_ecs
         run: |
           aws ecs update-service --cluster django-cluster --service django-service --force-new-deployment
-        continue-on-error: true
 
-      - name: Check for errors
-        run: |
-          echo "Checking previous steps..."
-          if [[ "${{ steps.apply_tf.outcome }}" == "failure" ]] || [[ "${{ steps.build_ecr.outcome }}" == "failure" ]] || [[ "${{ steps.deploy_ecs.outcome }}" == "failure" ]]; then
-            cd stack2
-            terraform destroy -auto-approve  
-          else
-            echo "finish"
-          fi
+      - name: Destroy Terraform resources on failure
+        if: failure()  # Solo se ejecuta si un paso anterior falla
+        run: terraform destroy -auto-approve
+        env:
+          TF_VAR_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}  # Reemplaza VARIABLE1 con tu nombre
+          TF_VAR_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  # Reemplaza VARIABLE2 con tu nombre
+          TF_VAR_region: ${{ secrets.AWS_REGION }}  # Si necesitas pasar variables de entorno
     
