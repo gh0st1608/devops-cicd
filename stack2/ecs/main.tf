@@ -10,8 +10,8 @@ resource "aws_ecs_task_definition" "django_task" {
   memory                  = "512"
 
   container_definitions = jsonencode([{
-    name      = "django"
-    image     = "my-django-image"  # Reemplaza con el nombre de tu imagen
+    name      = "django_container"
+    image     = "${var.ecs_image_name}"
     essential = true
     portMappings = [{
       containerPort = 8000
