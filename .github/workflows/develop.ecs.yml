@@ -34,7 +34,11 @@ jobs:
           cd stack2
           terraform apply -auto-approve
         continue-on-error: true
-
+      
+      - name: test
+        run: |
+          echo "termino con exito la creacion de recursos"
+      
       - name: Log in to Amazon ECR
         id: login_ecr
         uses: aws-actions/amazon-ecr-login@v1
