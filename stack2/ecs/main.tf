@@ -1,5 +1,5 @@
 resource "aws_ecs_cluster" "django_cluster" {
-  name = "django-cluster"
+  name = var.ecs_cluster_name
 }
 
 resource "aws_ecs_task_definition" "django_task" {
@@ -21,7 +21,7 @@ resource "aws_ecs_task_definition" "django_task" {
 }
 
 resource "aws_ecs_service" "django_service" {
-  name            = "django-service"
+  name            = var.ecs_service_name
   cluster         = aws_ecs_cluster.django_cluster.id
   task_definition = aws_ecs_task_definition.django_task.id
   launch_type     = "FARGATE"
