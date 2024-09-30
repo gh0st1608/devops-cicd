@@ -39,7 +39,7 @@ jobs:
 
       - name: Output Public IP
         run: |
-          PUBLIC_IP=$(cd stack1 && terraform output -raw elip | tr -d '\r\n')
+          PUBLIC_IP=$(cd stack1 && terraform output -raw public_ip | tr -d '\r\n')
           echo "PUBLIC_IP=${PUBLIC_IP}" >> $GITHUB_ENV
 
       - name: Use Public IP
