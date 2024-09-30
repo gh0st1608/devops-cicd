@@ -1,3 +1,3 @@
-output "public_ip" {
+output "elip_public_ip" {
   value = aws_eip.eip.public_ip
 }
