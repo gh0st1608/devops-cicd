@@ -31,17 +31,23 @@ jobs:
           cd stack1
           terraform apply -auto-approve
 
-      - name: Debug Public IP
+      - name: Debug Public IP 1
         run: |
           cd stack1
           cd elastic_ip
           terraform output -raw elip_public_ip
         continue-on-error: true
 
-      - name: Debug Public IP
+      - name: Debug Public IP 2
         run: |
           cd stack1
           terraform output -raw elip
+
+      - name: Debug Public IP 3
+        run: |
+          cd stack1
+          cd ec2
+          terraform output -raw ec2_public_ip
       
       - name: Output Public IP
         run: |
