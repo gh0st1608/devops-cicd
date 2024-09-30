@@ -2,7 +2,7 @@ name: Deploy_infra
 
 on:
   push:
-    branches: [infra-stack1]
+    branches: [deploy-stack1]
 
 jobs:
   deploy:
