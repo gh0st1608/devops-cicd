@@ -9,7 +9,3 @@ variable "secret_key" {
 variable "region" {
   type = string
 }
-
-variable "localstack_ci_key" {
-  type = string
-}
