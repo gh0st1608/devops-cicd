@@ -1,3 +1,0 @@
-output "elip" {
- value = "test"
-}
