@@ -33,7 +33,7 @@ jobs:
       
       - name: Output Public IP
         run: |
-           echo "public_ip=$(terraform output -raw elip_public_ip)" >> $GITHUB_ENV
+          echo "public_ip=$(terraform output -raw elip_public_ip)" >> $GITHUB_ENV
 
       - name: Update GitHub Repository Secret
         env:  
@@ -54,5 +54,5 @@ jobs:
           TF_VAR_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           TF_VAR_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  
           TF_VAR_region: ${{ secrets.AWS_REGION }}
-          TF_VAR_key_pair_public: ${{ secrets.AWS_ECS_CLUSTER_NAME }}
+          TF_VAR_key_public: ${{ secrets.AWS_SSH_PUBLIC_KEY }}
       
