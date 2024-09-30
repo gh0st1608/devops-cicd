@@ -33,7 +33,7 @@ jobs:
       
       - name: Output Public IP
         run: |
-           echo "public_ip=$(terraform output -raw elip_public_ip)" >> $GITHUB_ENV
+          echo "public_ip=$(terraform output -raw elip_public_ip)" >> $GITHUB_ENV
 
       - name: Update GitHub Repository Secret
         env:  
