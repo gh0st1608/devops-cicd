@@ -10,6 +10,10 @@ variable "region" {
   type = string
 }
 
-variable "key_public" {
+/* variable "key_public" {
+  type = string
+} */
+
+variable "domain" {
   type = string
 }

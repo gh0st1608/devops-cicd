@@ -5,8 +5,8 @@ module "ec2" {
 }
 
 module "keypair"{
-    source = "./keypair"
-    keypair_key_public = var.key_public
+  source = "./keypair"
+  #keypair_key_public = var.key_public
 }
 
 module "securitygroups"{
@@ -16,4 +16,10 @@ module "securitygroups"{
 module "elasticip"{
   source = "./elastic_ip"
   elip_instance_id = module.ec2.ec2_instance_id
+}
+
+module "route53"{
+  source = "./route53"
+  route53_public_ip = module.elasticip.elip_public_ip
+  route53_domain = var.domain
 }

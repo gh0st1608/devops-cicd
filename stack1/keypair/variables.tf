@@ -3,6 +3,6 @@ variable "keypair_key_name" {
   default = "keydev"
 }
 
-variable "keypair_key_public" {
+/* variable "keypair_key_public" {
   type = string
-}
+} */

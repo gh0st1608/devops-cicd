@@ -4,6 +4,10 @@ on:
   push:
     branches: [deploy-stack1]
 
+permissions:
+  contents: read
+  actions: read
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -30,31 +34,6 @@ jobs:
         run: |
           cd stack1
           terraform apply -auto-approve
-
-      - name: Debug Public IP 1
-        run: |
-          cd stack1
-          terraform output -raw public_ip
-        continue-on-error: true
-
-      - name: Output Public IP
-        run: |
-          PUBLIC_IP=$(cd stack1 && terraform output -raw public_ip | tr -d '\r\n')
-          echo "PUBLIC_IP=${PUBLIC_IP}" >> $GITHUB_ENV
-
-      - name: Use Public IP
-        run: |
-          echo "The public IP is: ${{ env.PUBLIC_IP }}"
-
-      - name: Update GitHub Repository Secret
-        env:  
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          curl -X PUT \
-            -H "Authorization: token $GITHUB_TOKEN" \
-            -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/${{ github.repository }}/actions/secrets/ELASTIC_IP \
-            -d '{"encrypted_value":"'"$(echo -n ${{ env.public_ip }} | openssl enc -aes-256-cbc -a -salt -pass pass:${{ secrets.AWS_PASSWORD_ENCRYPT }})"'", "visibility":"private"}'
 
       - name: Destroy Terraform resources on failure
         if: failure()  # Solo se ejecuta si un paso anterior falla
