@@ -1,6 +1,6 @@
 variable "keypair_key_name" {
   type = string
-  default = "keydev"
+  default = "django"
 }
 
 /* variable "keypair_key_public" {

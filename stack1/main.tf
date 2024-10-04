@@ -2,6 +2,8 @@ module "ec2" {
   source   = "./ec2"
   ec2_key_name = module.keypair.keypair_key_name
   ec2_security_group_id = module.securitygroups.gs_security_group_id
+  ec2_access_key = var.access_key
+  ec2_secret_key = var.secret_key
 }
 
 module "keypair"{
