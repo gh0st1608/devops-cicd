@@ -10,6 +10,10 @@ variable "region" {
   type = string
 }
 
-variable "localstack_ci_key" {
+/* variable "key_public" {
+  type = string
+} */
+
+variable "domain" {
   type = string
 }

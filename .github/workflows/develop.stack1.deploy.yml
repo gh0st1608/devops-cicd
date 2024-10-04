@@ -1,0 +1,31 @@
+name: Deploy_app
+
+on:
+  workflow_run:
+    workflows: ["Deploy_infra"]  # Nombre del primer workflow
+    types:
+      - completed  # Se activará cuando el primer workflow haya terminad
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          echo "StrictHostKeyChecking no" >> ~/.ssh/config
+
+      - name: Configure AWS Credentials
+        run: |
+          echo "[default]" > ~/.aws/config
+          echo "aws_access_key_id=${{ secrets.AWS_ACCESS_KEY_ID }}" >> ~/.aws/config
+          echo "aws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> ~/.aws/config
+
+      - name: Deploy to EC2
+        run: |
+          ssh -o "StrictHostKeyChecking=no" -i ~/.ssh/id_rsa ubuntu@${{ secrets.AWS_ELASTIC_IP }}
