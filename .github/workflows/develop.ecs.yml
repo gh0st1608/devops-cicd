@@ -2,7 +2,7 @@ name: Deploy to AWS
 
 on:
   push:
-    branches: [deploy-ecs]
+    branches: [deploy-stack2]
 
 jobs:
   deploy:
@@ -63,7 +63,7 @@ jobs:
       - name: Deploy to AWS ECS
         id: deploy_ecs
         run: |
-          aws ecs update-service --cluster ${{ secrets.AWS_ECS_CLUSTER_NAME }} --service ${{ secrets.AWS_ECS_SERVICE_NAME }} --force-new-deployment --debug
+          aws ecs update-service --cluster ${{ secrets.AWS_ECS_CLUSTER_NAME }} --service ${{ secrets.AWS_ECS_SERVICE_NAME }} --force-new-deployment
       
       - name: Ping to ECR
         run: |

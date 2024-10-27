@@ -1,8 +1,8 @@
 variable "keypair_key_name" {
   type = string
-  default = "keydev"
+  default = "dev"
 }
 
-variable "keypair_key_public" {
+/* variable "keypair_key_public" {
   type = string
-}
+} */

@@ -7,25 +7,51 @@ on:
       - completed  # Se activará cuando el primer workflow haya terminad
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Log in to AWS ECR
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: ${{ secrets.AWS_REGION }}
+      run: |
+        aws ecr get-login-password --region .us-east-1 | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr..us-east-1.amazonaws.com
+
+    - name: Build and push Docker image
+      run: |
+        docker-compose build
+        docker tag ${{ secrets.AWS_ECR_REPOSITORY_NAME }}:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/${{ secrets.AWS_ECR_REPOSITORY_NAME }}:latest
+        docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/${{ secrets.AWS_ECR_REPOSITORY_NAME }}:latest
+
+    - name: Run Docker Compose
+      run: docker-compose up -d
+      
   deploy:
     runs-on: ubuntu-latest
+    needs: build
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up SSH
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          echo "StrictHostKeyChecking no" >> ~/.ssh/config
-
-      - name: Configure AWS Credentials
-        run: |
-          echo "[default]" > ~/.aws/config
-          echo "aws_access_key_id=${{ secrets.AWS_ACCESS_KEY_ID }}" >> ~/.aws/config
-          echo "aws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> ~/.aws/config
-
       - name: Deploy to EC2
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
         run: |
-          ssh -o "StrictHostKeyChecking=no" -i ~/.ssh/id_rsa ubuntu@${{ secrets.AWS_ELASTIC_IP }}
+          # Obtener la dirección IP de la instancia EC2
+          INSTANCE_IP=$(aws ec2 describe-instances --instance-ids ${{ secrets.EC2_INSTANCE_ID }} --query "Reservations[0].Instances[0].PublicIpAddress" --output text)
+          
+          # Conectar a la instancia EC2 y ejecutar comandos
+          ssh -o StrictHostKeyChecking=no -i /stack1/deploy.pem ubuntu@$INSTANCE_IP << 'EOF'
+            # Pull de la última imagen desde ECR
+            docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/${{ secrets.AWS_ECR_REPOSITORY_NAME }}:latest
+            # Ejecutar el contenedor
+            docker-compose up -d
+          EOF

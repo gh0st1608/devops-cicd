@@ -1,0 +1,24 @@
+services:
+  app:
+    build:
+      context: .
+    expose:
+      - 8000
+    restart: always
+    volumes:
+      - static:/static
+      - sqllite_db:/app/db
+    
+  web:
+    build: ./web
+    volumes:
+      - static:/static #this is to make sure /static requests are routed to the shared volumne on host machine where django static files are stored
+    ports:
+      - "80:80"
+    depends_on:
+      - app
+    restart: always
+
+volumes:
+  static:
+  sqllite_db:

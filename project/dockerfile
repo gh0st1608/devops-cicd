@@ -1,0 +1,18 @@
+# First stage: build the Python app
+FROM python:3.11.9-bookworm AS build
+
+# install dependencies
+COPY ./requirements.txt .
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
+
+# copy project source code
+COPY ./app /app
+
+# set working directory
+WORKDIR /app
+
+# entrypoint shell scripts to be executed
+COPY ./entrypoint.sh /
+
+ENTRYPOINT ["sh", "/entrypoint.sh"]
