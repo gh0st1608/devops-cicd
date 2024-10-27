@@ -47,7 +47,9 @@ jobs:
             echo "No public IP found. Exiting."
             exit 1
           fi
-          echo "EIP=${OUTPUT}" >> $GITHUB_ENV
+          echo "EIP=${OUTPUT}" >> $GITHUB_ENV  # Agrega la IP al entorno
+          echo "EIP is set to ${OUTPUT}"  # Confirma la asignación
+          echo "EIP=${OUTPUT}"  # Verifica que la IP se establezca correctamente
 
       - name: Destroy Terraform resources on failure
         if: failure()  # Solo se ejecuta si un paso anterior falla
