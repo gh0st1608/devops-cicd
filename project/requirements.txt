@@ -1,0 +1,4 @@
+Pillow
+Django
+django-ckeditor
+gunicorn

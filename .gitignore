@@ -5,6 +5,8 @@ stack1/terraform.tfvars
 stack1/.terraform.lock.hcl
 stack1/terraform.tfstate
 stack1/terraform.tfstate.backup
+stack1/deploy.pem
+stack1/deploy
 
 
 stack2/terraform.tfvars

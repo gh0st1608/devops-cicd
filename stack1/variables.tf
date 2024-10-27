@@ -17,3 +17,11 @@ variable "region" {
 variable "domain" {
   type = string
 }
+
+variable "service" {
+  type = string
+}
+
+variable "repository" {
+  type = string
+}
