@@ -14,9 +14,9 @@ variable "region" {
   type = string
 } */
 
-variable "domain" {
+/* variable "domain" {
   type = string
-}
+} */
 
 variable "service" {
   type = string
