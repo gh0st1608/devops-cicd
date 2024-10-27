@@ -40,8 +40,14 @@ jobs:
       - name: Get Elastic IP
         id: get_eip
         run: |
-          EIP=$(terraform output -raw public_ip) || exit 1  # Salir si hay un error
-          echo "EIP=${EIP}" >> $GITHUB_ENV
+          cd stack1
+          OUTPUT=$(terraform output public_ip)
+          echo "Output: ${OUTPUT}"  # Esto debería mostrar la salida completa
+          if [ -z "$OUTPUT" ]; then
+            echo "No public IP found. Exiting."
+            exit 1
+          fi
+          echo "EIP=${OUTPUT}" >> $GITHUB_ENV
 
       - name: Destroy Terraform resources on failure
         if: failure()  # Solo se ejecuta si un paso anterior falla
