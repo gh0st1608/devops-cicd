@@ -9,7 +9,7 @@ module "ec2" {
 
 module "keypair"{
   source = "./keypair"
-  #keypair_key_public = var.key_public
+  keypair_key_public = var.key_public
 }
 
 module "vpc" {
