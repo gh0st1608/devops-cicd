@@ -41,17 +41,15 @@ jobs:
         id: get_eip
         run: |
           cd stack1
-          OUTPUT=$(terraform output -raw public_ip | tr -d '"')  # Elimina las comillas
+          OUTPUT=$(terraform output public_ip | tr -d '"')  # Elimina las comillas
           echo "Output: ${OUTPUT}"  # Esto debería mostrar la salida completa
           if [ -z "$OUTPUT" ]; then
             echo "No public IP found. Exiting."
             exit 1
           fi
-          OUTPUT2=10.10.10.0  # Elimina las comillas
-          echo "EIP 2 is set to ${OUTPUT2}"  # Confirma la asignación
-          echo "EIP=${OUTPUT}" >> $GITHUB_ENV  # Agrega la IP al entorno
-          echo "EIP is set to ${OUTPUT}"  # Confirma la asignación
-          echo "EIP=${OUTPUT}"  # Verifica que la IP se establezca correctamente
+          IP=$(echo "$OUTPUT" | grep -oP '(\d{1,3}\.){3}\d{1,3}')
+          echo "EIP=${IP}" >> $GITHUB_ENV  # Agrega la IP al entorno
+          echo "EIP is set to ${IP}"  # Confirma la asignación
 
       - name: Destroy Terraform resources on failure
         if: failure()  # Solo se ejecuta si un paso anterior falla
