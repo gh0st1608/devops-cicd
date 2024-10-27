@@ -41,7 +41,7 @@ jobs:
         id: get_eip
         run: |
           cd stack1
-          OUTPUT=$(terraform output public_ip)
+          OUTPUT=$(terraform output public_ip | tr -d '"')  # Elimina las comillas
           echo "Output: ${OUTPUT}"  # Esto debería mostrar la salida completa
           if [ -z "$OUTPUT" ]; then
             echo "No public IP found. Exiting."
