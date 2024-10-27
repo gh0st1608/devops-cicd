@@ -51,7 +51,7 @@ jobs:
           # Conectar a la instancia EC2 y ejecutar comandos
           ssh -o StrictHostKeyChecking=no -i /stack1/deploy.pem ubuntu@$INSTANCE_IP << 'EOF'
             # Pull de la última imagen desde ECR
-            docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.$AWS_REGION.amazonaws.com/${{ secrets.AWS_ECR_REPOSITORY_NAME }}:latest
+            docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/${{ secrets.AWS_ECR_REPOSITORY_NAME }}:latest
             # Ejecutar el contenedor
             docker-compose up -d
           EOF
