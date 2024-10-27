@@ -22,6 +22,6 @@ variable "service" {
   type = string
 }
 
-variable "repository" {
+variable "ecr_repository_name" {
   type = string
 }
