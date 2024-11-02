@@ -40,6 +40,7 @@ jobs:
 
     - name: Build and push Docker image
       run: |
+        cd project
         docker-compose build
         docker tag $AWS_ECR_REPOSITORY_NAME:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$AWS_ECR_REPOSITORY_NAME:latest
         docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$AWS_ECR_REPOSITORY_NAME:latest
