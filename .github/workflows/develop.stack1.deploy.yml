@@ -1,10 +1,13 @@
 name: Deploy_app
 
 on:
-  workflow_run:
-    workflows: ["Deploy_infra"]
-    types:
-      - completed  # Se activará cuando el primer workflow haya terminado
+  push:
+    branches: [develop]
+#on:
+#  workflow_run:
+#    workflows: ["Deploy_infra"]
+#    types:
+#      - completed  # Se activará cuando el primer workflow haya terminado
 
 permissions:
   contents: read
@@ -59,6 +62,7 @@ jobs:
         run: |
           #Leer IP
           IP=$(cat eip.txt)
+          echo "${IP}"
           # Conectar a la instancia EC2 y ejecutar comandos
           ssh -o StrictHostKeyChecking=no -i /stack1/deploy.pem ubuntu@$EIP << 'EOF'
             # Pull de la última imagen desde ECR
