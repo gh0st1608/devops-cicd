@@ -48,7 +48,7 @@ jobs:
             exit 1
           fi
           IP=$(echo "$OUTPUT" | grep -oP '(\d{1,3}\.){3}\d{1,3}')
-          echo "${IP}" > eip.txt  # Guardamos la IP en un file
+          echo "${IP}" > eip.txt  # Guardamos la IP en un file1
 
       - name: Upload Elastic IP as Artifact
         uses: actions/upload-artifact@v4
