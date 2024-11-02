@@ -5,7 +5,7 @@ on:
     workflows: ["Deploy_infra"]
     types:
       - completed  # Se activará cuando el primer workflow haya terminado
-      
+
 permissions:
   contents: read
   actions: read
@@ -13,7 +13,6 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
