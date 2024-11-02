@@ -2,9 +2,13 @@ name: Deploy_app
 
 on:
   workflow_run:
-    workflows: ["Deploy_infra"]  # Nombre del primer workflow
+    workflows: ["Deploy_infra"]
     types:
-      - completed  # Se activará cuando el primer workflow haya terminad
+      - completed  # Se activará cuando el primer workflow haya terminado
+      
+permissions:
+  contents: read
+  actions: read
 
 jobs:
   build:
