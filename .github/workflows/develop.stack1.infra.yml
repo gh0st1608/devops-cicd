@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v2
@@ -44,13 +44,6 @@ jobs:
           OUT_PUBLIC_IP=$(terraform output public_ip | tr -d '"')  # Elimina las comillas
           IP=$(echo "$OUT_PUBLIC_IP" | grep -oP '(\d{1,3}\.){3}\d{1,3}')
           echo "${IP}" > eip.txt  # Guardamos la IP en un file2
-          # Verifica que el archivo se haya creado
-          if [ -f eip.txt ]; then
-            echo "Elastic IP saved to eip.txt"
-          else
-            echo "Failed to create eip.txt"
-            exit 1
-          fi
 
       - name: Upload Elastic IP as Artifact
         uses: actions/upload-artifact@v4
