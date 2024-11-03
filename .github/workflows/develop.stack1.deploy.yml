@@ -51,7 +51,9 @@ jobs:
         docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$AWS_ECR_REPOSITORY_NAME:latest
 
     - name: Run Docker Compose
-      run: docker-compose up -d
+      run: |
+        cd project
+        docker-compose up -d
       
   deploy:
     runs-on: ubuntu-latest
