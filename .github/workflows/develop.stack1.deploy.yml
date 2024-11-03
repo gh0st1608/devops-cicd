@@ -46,7 +46,7 @@ jobs:
         cd project
         docker-compose build
         echo "ECR Repository Name: $AWS_ECR_REPOSITORY_NAME"
-        docker tag $AWS_ECR_REPOSITORY_NAME:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$AWS_ECR_REPOSITORY_NAME:latest
+        docker tag django_vaddy:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$AWS_ECR_REPOSITORY_NAME:latest
         docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$AWS_ECR_REPOSITORY_NAME:latest
 
     - name: Run Docker Compose
