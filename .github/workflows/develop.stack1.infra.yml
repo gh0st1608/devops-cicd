@@ -46,7 +46,7 @@ jobs:
           echo "${IP}" > eip.txt  # Guardamos la IP en un file2
 
       - name: Upload Elastic IP as Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: elastic-ip
           path: stack1/eip.txt
