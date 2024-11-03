@@ -3,11 +3,10 @@ name: Deploy_app
 on:
   push:
     branches: [develop]
-#on:
-#  workflow_run:
-#    workflows: ["Deploy_infra"]
-#    types:
-#      - completed  # Se activará cuando el primer workflow haya terminado
+  workflow_run:
+    workflows: ["Deploy_infra"]
+    types:
+      - completed  # Se activará cuando el primer workflow haya terminado
 
 permissions:
   contents: read
