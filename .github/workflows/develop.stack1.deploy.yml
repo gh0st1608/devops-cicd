@@ -58,6 +58,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: elastic-ip
+          path: project/eip.txt
 
       - name: Deploy to EC2
         env:
@@ -67,6 +68,7 @@ jobs:
           AWS_ECR_REPOSITORY_NAME: ${{ secrets.AWS_ECR_REPOSITORY_NAME }}
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
         run: |
+          cd project
           #Leer IP
           IP=$(cat eip.txt)
           echo "${IP}"
