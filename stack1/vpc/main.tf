@@ -42,13 +42,13 @@ resource "aws_route_table_association" "route_table_association_public" {
   route_table_id = aws_route_table.route_table_public.id
 }
 
-/* resource "aws_eip" "eip" {
+resource "aws_eip" "eip" {
   vpc        = true
   depends_on = [aws_internet_gateway.internet_gateway]
   tags = {
     Name = "eip-djangoapp"
   }
-} */
+}
 
 resource "aws_nat_gateway" "nat_gateway" {
   allocation_id = aws_eip.eip.id
