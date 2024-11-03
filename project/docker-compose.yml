@@ -2,6 +2,7 @@ services:
   app:
     build:
       context: .
+    image: django_vaddy:latest 
     expose:
       - 8000
     restart: always
@@ -11,6 +12,7 @@ services:
     
   web:
     build: ./web
+    image: web_vaddy:latest 
     volumes:
       - static:/static #this is to make sure /static requests are routed to the shared volumne on host machine where django static files are stored
     ports:
