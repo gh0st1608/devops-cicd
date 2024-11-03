@@ -49,9 +49,6 @@ jobs:
         docker tag django_vaddy:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$AWS_ECR_REPOSITORY_NAME:latest
         docker tag web_vaddy:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$AWS_ECR_REPOSITORY_NAME:latest
         docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$AWS_ECR_REPOSITORY_NAME:latest
-
-    - name: Run Docker Compose
-      run: docker-compose up -d
       
   deploy:
     runs-on: ubuntu-latest
