@@ -51,6 +51,7 @@ jobs:
           KEY: "dev/terraform.tfstate"  # Cambia esto a tu ruta deseada en S3
         run: |
           aws --version
+          cd stack1
           aws s3 cp terraform.tfstate s3://$BUCKET_NAME/$KEY
 
       - name: Get Elastic IP
