@@ -37,6 +37,13 @@ jobs:
           cd stack1
           terraform apply -auto-approve
 
+      - name: Upload Terraform State to S3
+        env:
+          BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
+          KEY: "dev/terraform.tfstate"  # Cambia esto a tu ruta deseada en S3
+        run: |
+          aws s3 cp terraform.tfstate s3://$BUCKET_NAME/$KEY
+
       - name: Get Elastic IP
         id: get_eip
         run: |

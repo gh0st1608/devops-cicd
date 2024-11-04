@@ -26,6 +26,10 @@ module "elasticip"{
   elip_instance_id = module.ec2.ec2_instance_id
 }
 
+module "s3" {
+  source = "./s3"
+}
+
 /* module "route53"{
   source = "./route53"
   route53_public_ip = module.elasticip.elip_public_ip
