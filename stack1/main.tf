@@ -28,6 +28,7 @@ module "elasticip"{
 
 module "s3" {
   source = "./s3"
+  s3_bucket_name = var.bucket_name
 }
 
 /* module "route53"{
