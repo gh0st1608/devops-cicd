@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "bucket" {
-    bucket = "state-dev"
+    bucket = var.s3_bucket_name
     lifecycle {
       prevent_destroy = false
   } 
