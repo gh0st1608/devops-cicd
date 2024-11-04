@@ -2,7 +2,7 @@ name: Deploy_app
 
 on:
   push:
-    branches: [develop]
+    branches: [deploy-stack1] #develop
   workflow_run:
     workflows: ["Deploy_infra"]
     types:
@@ -58,7 +58,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: elastic-ip
-          path: project/eip.txt
+          #path: project/eip.txt
 
       - name: Deploy to EC2
         env:
