@@ -1,8 +1,8 @@
 name: Deploy_app
 
 on:
-  push:
-    branches: [deploy-stack1] #develop
+  #push:
+  #  branches: [deploy-stack1] #develop
   workflow_run:
     workflows: ["Deploy_infra"]
     types:
