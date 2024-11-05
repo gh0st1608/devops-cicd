@@ -8,18 +8,10 @@ resource "aws_s3_bucket" "bucket" {
  }
 }
 
-/* resource "null_resource" "empty_bucket" {
-  provisioner "local-exec" {
-    command = "aws s3 rm s3://${aws_s3_bucket.my_bucket.bucket} --recursive"
-  }
-
-  depends_on = [aws_s3_bucket.bucket]
-} */
-
 resource "aws_s3_bucket_acl" "example_bucket_acl" {
 
     bucket = aws_s3_bucket.bucket.id
-    acl    = "public-read"
+    //acl    = "public-read"
     //acl = "private"
 
     depends_on = [
