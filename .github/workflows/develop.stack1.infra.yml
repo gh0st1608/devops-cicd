@@ -9,7 +9,7 @@ permissions:
   actions: read
 
 jobs:
-  deploy:
+  create-resources:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code

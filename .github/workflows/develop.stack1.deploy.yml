@@ -13,7 +13,7 @@ permissions:
   actions: read
 
 jobs:
-  build:
+  build-images:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
@@ -49,9 +49,9 @@ jobs:
         docker tag web_vaddy:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$AWS_ECR_REPOSITORY_NAME:latest
         docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$AWS_ECR_REPOSITORY_NAME:latest
       
-  deploy:
+  deploy-containers:
     runs-on: ubuntu-latest
-    needs: build
+    needs: build-images
 
     steps:
       - name: Download Elastic IP Artifact
