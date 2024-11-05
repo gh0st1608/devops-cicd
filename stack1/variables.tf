@@ -25,3 +25,7 @@ variable "service" {
 variable "repository" {
   type = string
 }
+
+variable "bucket_name" {
+  type = string
+}
