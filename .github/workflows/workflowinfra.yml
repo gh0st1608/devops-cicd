@@ -1,4 +1,4 @@
-name: Deploy_infra
+name: workflowinfra
 
 on:
   push:
