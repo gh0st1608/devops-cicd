@@ -83,6 +83,8 @@ jobs:
           chmod 600 "$(pwd)/deploy.pem"
           # Conectar a la instancia EC2 y ejecutar comandos
           ssh -o StrictHostKeyChecking=no -i deploy.pem ubuntu@"$IP" << 'EOF'
+            sudo apt-get update
+            sudo apt-get install -y docker-compose
             # Pull de la última imagen desde ECR
             docker pull $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$AWS_ECR_REPOSITORY_NAME:latest
             # Ejecutar el contenedor
