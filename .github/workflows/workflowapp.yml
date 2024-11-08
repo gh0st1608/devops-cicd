@@ -73,14 +73,16 @@ jobs:
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
           AWS_SSH_PRIVATE_KEY: ${{ secrets.AWS_SSH_PRIVATE_KEY }}
         run: |
-          #cd project
           #Leer IP
           #IP=$(cat eip.txt)
           cd project
           IP="98.84.102.0"
-          #echo "${IP}"
+          echo "${IP}"
+          # Descargar archivo
+          echo "$AWS_SSH_PRIVATE_KEY" > "$(pwd)/deploy.pem"
+          chmod 600 "$(pwd)/deploy.pem"
           # Conectar a la instancia EC2 y ejecutar comandos
-          ssh -o StrictHostKeyChecking=no -i $AWS_SSH_PRIVATE_KEY ubuntu@$IP << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i deploy.pem ubuntu@"$IP" << 'EOF'
             # Pull de la última imagen desde ECR
             docker pull $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$AWS_ECR_REPOSITORY_NAME:latest
             # Ejecutar el contenedor
