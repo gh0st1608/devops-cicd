@@ -76,7 +76,7 @@ jobs:
           cd project
           #Leer IP
           #IP=$(cat eip.txt)
-          IP=98.84.102.0
+          IP="98.84.102.0"
           #echo "${IP}"
           # Conectar a la instancia EC2 y ejecutar comandos
           ssh -o StrictHostKeyChecking=no -i $AWS_SSH_PRIVATE_KEY ubuntu@$EIP << 'EOF'
