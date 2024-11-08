@@ -82,7 +82,11 @@ jobs:
           echo "$AWS_SSH_PRIVATE_KEY" > "$(pwd)/deploy.pem"
           chmod 600 "$(pwd)/deploy.pem"
           # Conectar a la instancia EC2 y ejecutar comandos
-          ssh -o StrictHostKeyChecking=no -i deploy.pem ubuntu@"$IP" << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i deploy.pem ubuntu@"$IP" << "EOF"
+            echo "$(pwd)"
+            echo "AWS_ACCOUNT_ID: $AWS_ACCOUNT_ID"
+            echo "AWS_REGION: $AWS_REGION"
+            echo "AWS_ECR_REPOSITORY_NAME: $AWS_ECR_REPOSITORY_NAME"
             sudo apt-get update
             sudo apt-get install -y docker-compose
             # Pull de la última imagen desde ECR
