@@ -1,16 +1,17 @@
-name: Deploy_app
+name: workflowapp
 
 on:
-  #push:
-  #  branches: [deploy-stack1] #develop
+  push:
+    branches: [develop] #deploy-stack1
   workflow_run:
-    workflows: ["Deploy_infra"]
+    workflows: ["workflowinfra"]
     types:
       - completed  # Se activará cuando el primer workflow haya terminado
 
 permissions:
   contents: read
   actions: read
+  #artifacts: read
 
 jobs:
   build-images:
@@ -54,6 +55,9 @@ jobs:
     needs: build-images
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Download Elastic IP Artifact
         uses: actions/download-artifact@v4
         with:
