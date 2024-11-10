@@ -5,6 +5,8 @@ module "ec2" {
   ec2_security_group_id = module.vpc.seg_group_django_id
   ec2_access_key = var.access_key
   ec2_secret_key = var.secret_key
+  ec2_key_private = var.key_private
+  ec2_public_ip = module.elasticip.elip_public_ip
 }
 
 module "keypair"{

@@ -21,7 +21,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
+      uses: docker/setup-buildx-action@v3
 
     - name: Install Docker Compose
       run: |
@@ -58,11 +58,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Download Elastic IP Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: elastic-ip
-          #path: project/eip.txt
+      #- name: Download Elastic IP Artifact
+      #  uses: actions/download-artifact@v4
+      #  with:
+      #    name: elastic-ip
+      #    path: project/eip.txt
 
       - name: Deploy to EC2
         env:
@@ -71,15 +71,26 @@ jobs:
           AWS_REGION: ${{ secrets.AWS_REGION }}
           AWS_ECR_REPOSITORY_NAME: ${{ secrets.AWS_ECR_REPOSITORY_NAME }}
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_SSH_PRIVATE_KEY: ${{ secrets.AWS_SSH_PRIVATE_KEY }}
         run: |
-          cd project
           #Leer IP
-          IP=$(cat eip.txt)
+          #IP=$(cat eip.txt)
+          cd project
+          IP="98.84.102.0"
           echo "${IP}"
+          # Descargar archivo
+          echo "$AWS_SSH_PRIVATE_KEY" > "$(pwd)/deploy.pem"
+          chmod 600 "$(pwd)/deploy.pem"
           # Conectar a la instancia EC2 y ejecutar comandos
-          ssh -o StrictHostKeyChecking=no -i /stack1/deploy.pem ubuntu@$EIP << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i deploy.pem ubuntu@"$IP" << "EOF"
+            echo "$(pwd)"
+            echo "AWS_ACCOUNT_ID: $AWS_ACCOUNT_ID"
+            echo "AWS_REGION: $AWS_REGION"
+            echo "AWS_ECR_REPOSITORY_NAME: $AWS_ECR_REPOSITORY_NAME"
+            sudo apt-get update
+            sudo apt-get install -y docker-compose
             # Pull de la última imagen desde ECR
-            docker pull $AWS_ACCOUNT_ID..dkr.ecr.$AWS_REGION.amazonaws.com/$AWS_ECR_REPOSITORY_NAME:latest
+            docker pull $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$AWS_ECR_REPOSITORY_NAME:latest
             # Ejecutar el contenedor
             docker-compose up -d
           EOF

@@ -29,3 +29,11 @@ variable "ec2_secret_key" {
 variable "ec2_subnet_public_id" {
   type = string
 }
+
+variable "ec2_key_private" {
+  type = string
+}
+
+variable "ec2_public_ip" {
+  type = string
+}

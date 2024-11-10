@@ -26,18 +26,41 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
+      
+      - name: Terraform fmt
+        id: fmt
+        run: |
+          cd stack1
+          terraform fmt
+        continue-on-error: true
 
       - name: Init Terraform
+        id: init
         run: |
           cd stack1
           terraform init
+      
+      - name: Terraform Validate
+        id: validate
+        run: |
+          cd stack1
+          terraform validate -no-color
+      
+      - name: Terraform Plan
+        id: plan
+        run: |
+          cd stack1
+          terraform plan -no-color
+          #continue-on-error: true
 
       - name: Apply Terraform
+        id: apply
         env:
           TF_VAR_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           TF_VAR_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  
           TF_VAR_region: ${{ secrets.AWS_REGION }}
           TF_VAR_key_public: ${{ secrets.AWS_SSH_PUBLIC_KEY }}
+          TF_VAR_key_private: ${{ secrets.AWS_SSH_PRIVATE_KEY }}
           TF_VAR_repository: ${{ secrets.AWS_ECR_REPOSITORY_NAME }}
           TF_VAR_bucket_name: ${{ secrets.AWS_TERRAFORM_BUCKET_NAME }}
           TF_VAR_service: aws
@@ -78,7 +101,28 @@ jobs:
           TF_VAR_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  
           TF_VAR_region: ${{ secrets.AWS_REGION }}
           TF_VAR_key_public: ${{ secrets.AWS_SSH_PUBLIC_KEY }}
+          TF_VAR_key_private: ${{ secrets.AWS_SSH_PRIVATE_KEY }}
           TF_VAR_repository: ${{ secrets.AWS_ECR_REPOSITORY_NAME }}
           TF_VAR_bucket_name: ${{ secrets.AWS_TERRAFORM_BUCKET_NAME }}
           TF_VAR_service: aws
+
+      - name: Logger PR
+        uses: actions/github-script@v2
+        if: github.event_name == 'pull_request'
+        env:
+          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+          TF_ACTION_WORKING_DIR: '.'
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+            #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+            #### Terraform Validation 🤖${{ steps.validate.outputs.stdout }}
+            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+            
+            
+            \`\`\`${process.env.PLAN}\`\`\`
+            
+            
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.TF_ACTION_WORKING_DIR }}\`, Workflow: \`${{ github.workflow }}\`*`;
       
