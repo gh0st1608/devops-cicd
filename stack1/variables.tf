@@ -33,3 +33,7 @@ variable "repository" {
 variable "bucket_name" {
   type = string
 }
+
+variable "token_github" {
+  type = string
+}

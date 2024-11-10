@@ -76,7 +76,7 @@ jobs:
           #Leer IP
           #IP=$(cat eip.txt)
           cd project
-          IP="98.84.102.0"
+          IP="18.205.15.29"
           echo "${IP}"
           # Descargar archivo
           echo "$AWS_SSH_PRIVATE_KEY" > "$(pwd)/deploy.pem"

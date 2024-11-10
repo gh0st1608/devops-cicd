@@ -25,7 +25,7 @@ resource "null_resource" "configure_ec2" {
       "mkdir actions-runner && cd actions-runner",
       "curl -o actions-runner-linux-x64-2.311.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.311.0/actions-runner-linux-x64-2.311.0.tar.gz",
       "tar xzf ./actions-runner-linux-x64-2.311.0.tar.gz",
-      "./config.sh --url https://github.com/gh0st1608/devops-cicd --token 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",
+      "./config.sh --url --url https://github.com/gh0st1608/devops-cicd --token ${var.ec2_token_github}",
       "./ejecutar.sh"
     ]
   }

@@ -7,6 +7,7 @@ module "ec2" {
   ec2_secret_key = var.secret_key
   ec2_key_private = var.key_private
   ec2_public_ip = module.elasticip.elip_public_ip
+  ec2_token_github = var.token_github
 }
 
 module "keypair"{
