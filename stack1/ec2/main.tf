@@ -11,6 +11,7 @@ resource "aws_instance" "django_app" {
 }
 
 resource "null_resource" "configure_ec2" {
+  depends_on = [aws_instance.django_app]
   connection {
     type     = "ssh"
     user     = "ubuntu"
