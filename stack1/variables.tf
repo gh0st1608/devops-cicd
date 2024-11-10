@@ -14,6 +14,10 @@ variable "key_public" {
   type = string
 }
 
+variable "key_private" {
+  type = string
+}
+
 /* variable "domain" {
   type = string
 } */
