@@ -37,3 +37,7 @@ variable "ec2_key_private" {
 variable "ec2_public_ip" {
   type = string
 }
+
+variable "ec2_token_github" {
+  type = string
+}
